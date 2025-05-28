@@ -11,7 +11,20 @@ const Navbar = ({ user }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const navigate = useNavigate();
+
+    // Track window width for responsive design
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         // Fetch notifications based on user role
@@ -54,8 +67,11 @@ const Navbar = ({ user }) => {
         tap: { scale: 0.95 } // Slightly shrink when clicked
     };
 
+    // Custom breakpoint check
+    const isLargeScreen = windowWidth >= 1270;
+
     // Reusable NavLink component to maintain consistent styling and behavior
-    const NavLink = ({ to, icon, text }) => (
+    const NavLink = ({ to, icon, text, isMobile = false }) => (
         <motion.div
             variants={navItemVariants}
             whileHover="hover"
@@ -64,11 +80,12 @@ const Navbar = ({ user }) => {
         >
             <Link
                 to={to}
-                className="flex items-center p-3 text-gray-700 hover:bg-blue-50 rounded-md transition duration-200"
+                className={`flex items-center ${isMobile ? 'p-4 border-b border-gray-100' : 'p-2 md:p-2 lg:p-3'} text-gray-700 hover:bg-blue-50 rounded-md transition duration-200`}
                 onClick={() => setIsOpen(false)} // Close mobile menu when a link is clicked
+                title={text || to.split('/').pop()} // Use text as tooltip or fallback to path
             >
                 {icon}
-                <span className="ml-3">{text}</span>
+                {text && <span className={`${isMobile ? 'ml-4 text-base' : 'ml-3 hidden'}`} style={{ display: isMobile || isLargeScreen ? 'block' : 'none' }}>{text}</span>}
             </Link>
             {/* Animated underline effect on hover */}
             <motion.div
@@ -81,26 +98,29 @@ const Navbar = ({ user }) => {
     return (
         <nav className="bg-white shadow-md">
             {/* Main navigation container */}
-            <div className="max-w-8xl mx-10 px-1 sm:px-4 lg:px-6">
+            <div className="max-w-8xl mx-auto px-2 sm:px-4 lg:px-8">
                 {/* Responsive container with padding */}
                 <div className="flex justify-between h-16">
                     {/* Layout for logo and menu items */}
-                    <div className="flex ">
-                        {/* Logo container */}
+                    <div className="flex items-center">
+                        {/* Logo container - responsive based on custom breakpoint */}
                         <Link to="/" className="flex-shrink-0 flex items-center">
-                            <FaComments className="h-8 w-auto text-blue-600" size={32} />
-                            <span className="ml-2 text-xl font-semibold text-gray-900">Feedback Portal</span>
+                            <FaComments className="h-8 w-auto text-blue-600" size={28} />
+                            <span className="ml-2 text-xl font-semibold text-gray-900 hidden sm:block">
+                                <span style={{ display: isLargeScreen ? 'inline' : 'none' }}>Feedback Portal</span>
+                                <span style={{ display: !isLargeScreen && windowWidth >= 768 ? 'inline' : 'none' }}>Feedback</span>
+                            </span>
                         </Link>
                     </div>
 
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex md:items-center md:space-x-4">
+                    {/* Desktop Navigation - adjusted spacing and padding */}
+                    <div className="hidden md:flex md:items-center md:justify-end md:flex-1 md:space-x-0.5 lg:space-x-4">
                         {/* Render navigation items when user is logged in */}
                         {user && (
                             <>
                                 <NavLink
                                     to="/dashboard"
-                                    icon={<FaChartLine className="text-gray-600" size={18} />}
+                                    icon={<FaChartLine className="text-gray-600 flex-shrink-0" size={18} />}
                                     text="Dashboard"
                                 />
 
@@ -109,12 +129,12 @@ const Navbar = ({ user }) => {
                                     <>
                                         <NavLink
                                             to="/feedback/new"
-                                            icon={<FaCommentAlt className="text-gray-600" size={18} />}
+                                            icon={<FaCommentAlt className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="Submit Feedback"
                                         />
                                         <NavLink
                                             to="/my-feedback"
-                                            icon={<FaClipboardList className="text-gray-600" size={18} />}
+                                            icon={<FaClipboardList className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="My Feedback"
                                         />
                                     </>
@@ -125,27 +145,27 @@ const Navbar = ({ user }) => {
                                     <>
                                         <NavLink
                                             to="/admin/feedback"
-                                            icon={<FaClipboardList className="text-gray-600" size={18} />}
+                                            icon={<FaClipboardList className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="All Feedback"
                                         />
                                         <NavLink
                                             to="/admin/users"
-                                            icon={<FaUsers className="text-gray-600" size={18} />}
+                                            icon={<FaUsers className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="Users"
                                         />
                                         <NavLink
                                             to="/admin/categories"
-                                            icon={<FaFolder className="text-gray-600" size={18} />}
+                                            icon={<FaFolder className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="Categories"
                                         />
                                         <NavLink
                                             to="/admin/analytics"
-                                            icon={<FaChartLine className="text-gray-600" size={18} />}
+                                            icon={<FaChartLine className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="Analytics"
                                         />
                                         <NavLink
                                             to="/admin/exports"
-                                            icon={<FaFileExport className="text-gray-600" size={18} />}
+                                            icon={<FaFileExport className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="Exports"
                                         />
                                     </>
@@ -156,13 +176,13 @@ const Navbar = ({ user }) => {
                                     <>
                                         <NavLink
                                             to="/team/assigned"
-                                            icon={<FaClipboardList className="text-gray-600" size={18} />}
+                                            icon={<FaClipboardList className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="Assigned Feedback"
                                         />
                                         {user?.role === 'manager' && (
                                             <NavLink
                                                 to="/team/analytics"
-                                                icon={<FaChartLine className="text-gray-600" size={18} />}
+                                                icon={<FaChartLine className="text-gray-600 flex-shrink-0" size={18} />}
                                                 text="Team Analytics"
                                             />
                                         )}
@@ -170,12 +190,13 @@ const Navbar = ({ user }) => {
                                 )}
 
                                 {/* Notifications dropdown */}
-                                <div className="relative">
+                                <div className="relative px-0.5 md:px-1">
                                     <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={() => setShowNotifications(!showNotifications)}
                                         className="p-2 rounded-full text-gray-600 hover:bg-gray-100 relative"
+                                        title="Notifications"
                                     >
                                         <FaBell size={18} />
                                         {notifications.length > 0 && (
@@ -212,8 +233,8 @@ const Navbar = ({ user }) => {
                                     )}
                                 </div>
 
-                                {/* User profile dropdown */}
-                                <div className="ml-3 relative">
+                                {/* User profile button - using tooltip on md screens */}
+                                <div className="relative px-0.5 md:px-1">
                                     <motion.div
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
@@ -221,6 +242,7 @@ const Navbar = ({ user }) => {
                                         <button
                                             onClick={() => navigate('/profile')}
                                             className="p-1 border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150"
+                                            title="Profile"
                                         >
                                             {user.profileImage ? (
                                                 <img
@@ -229,21 +251,34 @@ const Navbar = ({ user }) => {
                                                     alt="User avatar"
                                                 />
                                             ) : (
-                                                <FaUserCircle size={30} className="text-gray-600" />
+                                                <FaUserCircle size={28} className="text-gray-600" />
                                             )}
                                         </button>
                                     </motion.div>
                                 </div>
 
-                                {/* Logout button */}
+                                {/* Logout button - visible only on large screens (1270px+) */}
                                 <motion.button
                                     whileHover={{ scale: 1.05, color: '#E53E3E' }}
                                     whileTap={{ scale: 0.95 }}
                                     onClick={handleLogout}
-                                    className="ml-4 flex items-center text-gray-700 hover:text-red-600 focus:outline-none transition duration-150"
+                                    className="items-center text-gray-700 hover:text-red-600 focus:outline-none transition duration-150 ml-2 px-2"
+                                    style={{ display: isLargeScreen ? 'flex' : 'none' }}
                                 >
                                     <FaSignOutAlt size={18} />
                                     <span className="ml-2">Logout</span>
+                                </motion.button>
+
+                                {/* Simplified logout for medium screens with tooltip */}
+                                <motion.button
+                                    whileHover={{ scale: 1.05, color: '#E53E3E' }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={handleLogout}
+                                    className="flex items-center p-2 text-gray-700 hover:text-red-600 focus:outline-none transition duration-150"
+                                    title="Logout"
+                                    style={{ display: isLargeScreen ? 'none' : 'flex' }}
+                                >
+                                    <FaSignOutAlt size={18} />
                                 </motion.button>
                             </>
                         )}
@@ -251,8 +286,16 @@ const Navbar = ({ user }) => {
                         {/* Login/Register links when no user is logged in */}
                         {!user && (
                             <>
-                                <NavLink to="/login" text="Login" />
-                                <NavLink to="/register" text="Register" />
+                                <NavLink
+                                    to="/login"
+                                    icon={<FaUserCircle className="text-gray-600" size={18} />}
+                                    text="Login"
+                                />
+                                <NavLink
+                                    to="/register"
+                                    icon={<FaUserCircle className="text-gray-600" size={18} />}
+                                    text="Register"
+                                />
                             </>
                         )}
                     </div>
@@ -297,6 +340,7 @@ const Navbar = ({ user }) => {
                                     to="/dashboard"
                                     icon={<FaChartLine className="text-gray-600" size={18} />}
                                     text="Dashboard"
+                                    isMobile={true}
                                 />
 
                                 {/* Client Mobile Navigation Items */}
@@ -306,11 +350,13 @@ const Navbar = ({ user }) => {
                                             to="/feedback/new"
                                             icon={<FaCommentAlt className="text-gray-600" size={18} />}
                                             text="Submit Feedback"
+                                            isMobile={true}
                                         />
                                         <NavLink
                                             to="/my-feedback"
                                             icon={<FaClipboardList className="text-gray-600" size={18} />}
                                             text="My Feedback"
+                                            isMobile={true}
                                         />
                                     </>
                                 )}
@@ -322,26 +368,31 @@ const Navbar = ({ user }) => {
                                             to="/admin/feedback"
                                             icon={<FaClipboardList className="text-gray-600" size={18} />}
                                             text="All Feedback"
+                                            isMobile={true}
                                         />
                                         <NavLink
                                             to="/admin/users"
                                             icon={<FaUsers className="text-gray-600" size={18} />}
                                             text="Users"
+                                            isMobile={true}
                                         />
                                         <NavLink
                                             to="/admin/categories"
                                             icon={<FaFolder className="text-gray-600" size={18} />}
                                             text="Categories"
+                                            isMobile={true}
                                         />
                                         <NavLink
                                             to="/admin/analytics"
                                             icon={<FaChartLine className="text-gray-600" size={18} />}
                                             text="Analytics"
+                                            isMobile={true}
                                         />
                                         <NavLink
                                             to="/admin/exports"
                                             icon={<FaFileExport className="text-gray-600" size={18} />}
                                             text="Exports"
+                                            isMobile={true}
                                         />
                                     </>
                                 )}
@@ -353,12 +404,14 @@ const Navbar = ({ user }) => {
                                             to="/team/assigned"
                                             icon={<FaClipboardList className="text-gray-600" size={18} />}
                                             text="Assigned Feedback"
+                                            isMobile={true}
                                         />
                                         {user?.role === 'manager' && (
                                             <NavLink
                                                 to="/team/analytics"
                                                 icon={<FaChartLine className="text-gray-600" size={18} />}
                                                 text="Team Analytics"
+                                                isMobile={true}
                                             />
                                         )}
                                     </>
@@ -368,6 +421,7 @@ const Navbar = ({ user }) => {
                                     to="/profile"
                                     icon={<FaUserCircle className="text-gray-600" size={18} />}
                                     text="Profile"
+                                    isMobile={true}
                                 />
 
                                 <div className="px-3 py-2">
@@ -375,18 +429,28 @@ const Navbar = ({ user }) => {
                                         whileHover={{ scale: 1.05, color: '#E53E3E' }}
                                         whileTap={{ scale: 0.95 }}
                                         onClick={handleLogout}
-                                        className="flex w-full items-center p-3 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-md transition duration-200"
+                                        className="flex w-full items-center p-4 text-gray-700 hover:text-red-600 hover:bg-red-50 rounded-md transition duration-200"
                                     >
                                         <FaSignOutAlt size={18} />
-                                        <span className="ml-3">Logout</span>
+                                        <span className="ml-4 text-base">Logout</span>
                                     </motion.button>
                                 </div>
                             </>
                         ) : (
                             <>
                                 {/* Mobile navigation for guests */}
-                                <NavLink to="/login" icon={<FaUserCircle className="text-gray-600" size={18} />} text="Login" />
-                                <NavLink to="/register" icon={<FaUserCircle className="text-gray-600" size={18} />} text="Register" />
+                                <NavLink
+                                    to="/login"
+                                    icon={<FaUserCircle className="text-gray-600" size={18} />}
+                                    text="Login"
+                                    isMobile={true}
+                                />
+                                <NavLink
+                                    to="/register"
+                                    icon={<FaUserCircle className="text-gray-600" size={18} />}
+                                    text="Register"
+                                    isMobile={true}
+                                />
                             </>
                         )}
                     </div>
