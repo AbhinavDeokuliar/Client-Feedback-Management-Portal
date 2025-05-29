@@ -179,13 +179,7 @@ const Navbar = ({ user }) => {
                                             icon={<FaClipboardList className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="Assigned Feedback"
                                         />
-                                        {user?.role === 'manager' && (
-                                            <NavLink
-                                                to="/team/analytics"
-                                                icon={<FaChartLine className="text-gray-600 flex-shrink-0" size={18} />}
-                                                text="Team Analytics"
-                                            />
-                                        )}
+
                                     </>
                                 )}
 

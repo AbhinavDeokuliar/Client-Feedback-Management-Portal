@@ -10,7 +10,7 @@ const App = () => {
     id: '1',
     name: 'Admin User',
     email: 'admin@example.com',
-    role: 'client' // This is the key property that determines the layout
+    role: 'manager' // This is the key property that determines the layout
   });
 
   // Function to determine which layout to render based on user role
