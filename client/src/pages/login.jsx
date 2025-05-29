@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from "../components/Navbar";
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FaUser, FaLock, FaUserTie, FaUserShield, FaBuilding, FaChartLine, FaShieldAlt } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
+import Navbar from '../components/Navbar';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from || "/";
+
     const [userType, setUserType] = useState('client');
     const [formData, setFormData] = useState({
         email: '',
@@ -26,8 +31,35 @@ const Login = () => {
         // Simulate API call
         setTimeout(() => {
             setIsLoading(false);
-            // Handle login logic here
-            console.log('Logging in as', userType, 'with', formData);
+
+            // Create appropriate role based on userType selection
+            let role;
+            switch (userType) {
+                case 'Team':
+                    role = 'team';  // Or you could set specific team roles like 'manager', 'developer', etc.
+                    break;
+                case 'admin':
+                    role = 'admin';
+                    break;
+                default:
+                    role = 'client';
+            }
+
+            // Create user object with authentication info
+            const userData = {
+                id: Math.random().toString(36).substr(2, 9), // Generate random ID (replace with actual ID from API)
+                name: formData.email.split('@')[0], // Use part of email as name (replace with actual name from API)
+                email: formData.email,
+                role: role
+            };
+
+            // Pass the user data up to App component via onLogin prop
+            onLogin(userData);
+
+            // Navigate to the intended destination or default based on role
+            navigate(from);
+
+            console.log('Logging in as', role, 'with', formData);
         }, 1500);
     };
 
@@ -285,7 +317,6 @@ const Login = () => {
                             {/* Right Section: Login Form */}
                             <motion.div
                                 className={`p-8 md:w-2/3 relative`}
-                                // RIGHT SECTION BACKGROUND COLOR
                                 animate={{
                                     backgroundColor: userTypeInfo[userType].color === 'blue' ? 'rgba(239, 246, 255, 0.5)' :
                                         userTypeInfo[userType].color === 'green' ? 'rgba(236, 253, 245, 0.5)' :
@@ -412,7 +443,6 @@ const Login = () => {
                                                 transition={{ delay: 0.7 }}
                                                 className="flex items-center justify-between"
                                             >
-
                                                 {/* FORGOT PASSWORD LINK */}
                                                 <a href="#" className={`text-sm text-${userTypeInfo[userType].color}-600 hover:underline`}>
                                                     Forgot password?
@@ -447,14 +477,12 @@ const Login = () => {
                                                             initial={{ opacity: 0 }}
                                                             animate={{ opacity: 1 }}
                                                         >
-                                                            Login as {userType.charAt(0).toUpperCase() + userType.slice(1)}
+                                                            {from !== "/" ? `Login to Continue` : `Login as ${userType.charAt(0).toUpperCase() + userType.slice(1)}`}
                                                         </motion.span>
                                                     )}
                                                 </motion.button>
                                             </motion.div>
                                         </form>
-
-
                                     </motion.div>
                                 </AnimatePresence>
                             </motion.div>
