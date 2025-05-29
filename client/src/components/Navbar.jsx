@@ -118,22 +118,23 @@ const Navbar = ({ user }) => {
                         {/* Render navigation items when user is logged in */}
                         {user && (
                             <>
-                                <NavLink
-                                    to="/dashboard"
-                                    icon={<FaChartLine className="text-gray-600 flex-shrink-0" size={18} />}
-                                    text="Dashboard"
-                                />
+
 
                                 {/* Client Navigation Items */}
                                 {isClient && (
                                     <>
                                         <NavLink
-                                            to="/feedback/new"
+                                            to="/client/dashboard"
+                                            icon={<FaChartLine className="text-gray-600 flex-shrink-0" size={18} />}
+                                            text="Dashboard"
+                                        />
+                                        <NavLink
+                                            to="/client/submit-feedback"
                                             icon={<FaCommentAlt className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="Submit Feedback"
                                         />
                                         <NavLink
-                                            to="/my-feedback"
+                                            to="/client/my-feedback"
                                             icon={<FaClipboardList className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="My Feedback"
                                         />
@@ -143,6 +144,11 @@ const Navbar = ({ user }) => {
                                 {/* Admin Navigation Items */}
                                 {isAdmin && (
                                     <>
+                                        <NavLink
+                                            to="/admin/dashboard"
+                                            icon={<FaChartLine className="text-gray-600 flex-shrink-0" size={18} />}
+                                            text="Dashboard"
+                                        />
                                         <NavLink
                                             to="/admin/feedback"
                                             icon={<FaClipboardList className="text-gray-600 flex-shrink-0" size={18} />}
@@ -175,7 +181,12 @@ const Navbar = ({ user }) => {
                                 {isTeamMember && (
                                     <>
                                         <NavLink
-                                            to="/team/assigned"
+                                            to="/team/dashboard"
+                                            icon={<FaChartLine className="text-gray-600 flex-shrink-0" size={18} />}
+                                            text="Dashboard"
+                                        />
+                                        <NavLink
+                                            to="/team/assigned-feedback"
                                             icon={<FaClipboardList className="text-gray-600 flex-shrink-0" size={18} />}
                                             text="Assigned Feedback"
                                         />
