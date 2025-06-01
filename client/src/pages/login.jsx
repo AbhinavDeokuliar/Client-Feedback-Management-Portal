@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { FaUser, FaLock, FaUserCircle, FaChartLine, FaComments } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../components/Navbar';
@@ -10,12 +10,28 @@ const Login = ({ onLogin }) => {
     const location = useLocation();
     const from = location.state?.from || "/";
 
+    // Get registration success message if coming from registration page
+    const registrationSuccess = location.state?.registrationSuccess;
+    const successMessage = location.state?.message;
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [showSuccess, setShowSuccess] = useState(registrationSuccess || false);
+
+    // Hide success message after 5 seconds
+    useEffect(() => {
+        let timer;
+        if (showSuccess) {
+            timer = setTimeout(() => {
+                setShowSuccess(false);
+            }, 5000);
+        }
+        return () => clearTimeout(timer);
+    }, [showSuccess]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -154,30 +170,24 @@ const Login = ({ onLogin }) => {
                             transition={{ duration: 0.3 }}
                             className="p-8 relative"
                         >
-                            {/* Decorative background elements */}
-                            <div className="absolute inset-0 overflow-hidden opacity-10">
-                                {[...Array(8)].map((_, i) => (
+                            {/* Registration success message */}
+                            <AnimatePresence>
+                                {showSuccess && (
                                     <motion.div
-                                        key={i}
-                                        className="absolute rounded-full bg-blue-500"
-                                        style={{
-                                            width: `${Math.random() * 40 + 10}px`,
-                                            height: `${Math.random() * 40 + 10}px`,
-                                            left: `${Math.random() * 100}%`,
-                                            top: `${Math.random() * 100}%`,
-                                        }}
-                                        animate={{
-                                            x: [0, Math.random() * 20 - 10],
-                                            y: [0, Math.random() * 20 - 10],
-                                        }}
-                                        transition={{
-                                            repeat: Infinity,
-                                            repeatType: "reverse",
-                                            duration: 3 + Math.random() * 2,
-                                        }}
-                                    />
-                                ))}
-                            </div>
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                        className="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg"
+                                    >
+                                        <div className="flex items-center">
+                                            <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
+                                            </svg>
+                                            <p>{successMessage || 'Registration successful! Please sign in with your new account.'}</p>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
 
                             {/* HEADER WITH ICON */}
                             <div className="text-center mb-8 relative z-10">
@@ -327,7 +337,7 @@ const Login = ({ onLogin }) => {
                                     </motion.button>
                                 </motion.div>
 
-                                {/* REGISTER LINK */}
+                                {/* REGISTER LINK - Updated to use Link component */}
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
@@ -335,9 +345,9 @@ const Login = ({ onLogin }) => {
                                     className="text-center mt-6"
                                 >
                                     <span className="text-gray-600">Don't have an account? </span>
-                                    <a href="/register" className="text-blue-600 font-medium hover:underline">
+                                    <Link to="/register" className="text-blue-600 font-medium hover:underline">
                                         Sign up
-                                    </a>
+                                    </Link>
                                 </motion.div>
                             </form>
                         </motion.div>

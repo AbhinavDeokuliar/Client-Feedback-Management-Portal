@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import Login from "./pages/login";
+import Registration from "./pages/Registration";
 import InternalRoutes from "./routes/Internal.Routes";
 import { AdminLayout, ClientLayout, TeamLayout } from "./layouts";
 import Not_Found from "./pages/Not_Found";
@@ -46,22 +47,25 @@ const App = () => {
 // Separate component to access useLocation hook
 const AppContent = ({ user, onLogin, onLogout }) => {
   const location = useLocation();
-  const isLoginPage = location.pathname === '/login';
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Only show header when not on login page and user is logged in */}
-      {!isLoginPage && user && (
+      {/* Only show header when not on login/register page and user is logged in */}
+      {!isAuthPage && user && (
         <header>
           <Navbar user={user} onLogout={onLogout} />
         </header>
       )}
 
-      <main className={`flex-grow ${!isLoginPage && user ? 'pt-16' : ''}`}>
+      <main className={`flex-grow ${!isAuthPage && user ? 'pt-16' : ''}`}>
         <Routes>
-          {/* Public route for login */}
+          {/* Public routes for authentication */}
           <Route path="/login" element={
             !user ? <Login onLogin={onLogin} /> : <Navigate to="/" replace />
+          } />
+          <Route path="/register" element={
+            !user ? <Registration /> : <Navigate to="/" replace />
           } />
 
           {/* Protected routes with proper layout selection */}
@@ -91,8 +95,8 @@ const AppContent = ({ user, onLogin, onLogout }) => {
         </Routes>
       </main>
 
-      {/* Only show footer when not on login page and user is logged in */}
-      {!isLoginPage && user && (
+      {/* Only show footer when not on login/register page and user is logged in */}
+      {!isAuthPage && user && (
         <footer className="bg-gray-100">
           <Footer />
         </footer>
