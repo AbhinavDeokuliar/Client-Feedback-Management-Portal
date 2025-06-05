@@ -38,9 +38,7 @@ const App = () => {
   };
 
   return (
-
     <AppContent user={user} onLogin={handleLogin} onLogout={handleLogout} />
-
   );
 }
 
@@ -50,7 +48,7 @@ const AppContent = ({ user, onLogin, onLogout }) => {
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-blue-100">
       {/* Only show header when not on login/register page and user is logged in */}
       {!isAuthPage && user && (
         <header>
@@ -58,7 +56,7 @@ const AppContent = ({ user, onLogin, onLogout }) => {
         </header>
       )}
 
-      <main className={`flex-grow ${!isAuthPage && user ? 'pt-16' : ''}`}>
+      <main className={`flex-grow ${!isAuthPage && user ? 'pt-1' : ''}`}>
         <Routes>
           {/* Public routes for authentication */}
           <Route path="/login" element={
@@ -97,10 +95,12 @@ const AppContent = ({ user, onLogin, onLogout }) => {
 
       {/* Only show footer when not on login/register page and user is logged in */}
       {!isAuthPage && user && (
-        <footer className="bg-gray-100">
+        <footer className="bg-amber-800 bg-opacity-20 text-amber-900 border-t border-amber-200">
           <Footer />
         </footer>
       )}
+
+
     </div>
   );
 }

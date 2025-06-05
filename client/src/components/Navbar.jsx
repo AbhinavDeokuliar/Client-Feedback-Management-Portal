@@ -134,11 +134,11 @@ const Navbar = ({ user }) => {
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.95, opacity: 0 }}
                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="bg-white rounded-lg shadow-lg w-full max-w-sm mx-4 overflow-hidden"
+                        className="bg-white rounded-lg shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform motion-safe:animate-zoom-in"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="px-6 pt-6 pb-4">
-                            <h3 className="text-lg font-medium text-gray-900 mb-1">Sign Out</h3>
+                            <h3 className="text-lg font-serif font-bold text-gray-800 mb-1">Sign Out</h3>
                             <p className="text-sm text-gray-500">
                                 Are you sure you want to sign out of your account?
                             </p>
@@ -152,7 +152,7 @@ const Navbar = ({ user }) => {
                                 Cancel
                             </button>
                             <button
-                                className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700"
+                                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700 shadow-sm"
                                 onClick={handleLogout}
                             >
                                 Sign Out
@@ -167,26 +167,26 @@ const Navbar = ({ user }) => {
     return (
         <>
             <nav className="bg-white shadow-md relative overflow-hidden">
-                {/* Animated background */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-70"></div>
+                {/* Animated background - updated to match Dashboard's custom-blue */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-100 opacity-70"></div>
 
-                {/* Animated dots and circles */}
+                {/* Animated dots and circles with updated colors */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none">
                     {[...Array(6)].map((_, i) => (
                         <motion.div
                             key={`nav-particle-${i}`}
-                            className="absolute rounded-full bg-blue-200"
+                            className="absolute rounded-full bg-indigo-200"
                             style={{
                                 width: `${Math.random() * 8 + 4}px`,
                                 height: `${Math.random() * 8 + 4}px`,
                                 top: `${Math.random() * 100}%`,
                                 left: `${Math.random() * 100}%`,
-                                opacity: 0.3,
+                                opacity: 0.4,
                             }}
                             animate={{
                                 y: [0, -15, 0],
                                 x: [0, Math.random() * 10 - 5, 0],
-                                opacity: [0.3, 0.6, 0.3]
+                                opacity: [0.4, 0.7, 0.4]
                             }}
                             transition={{
                                 repeat: Infinity,
@@ -196,9 +196,9 @@ const Navbar = ({ user }) => {
                         />
                     ))}
 
-                    {/* Larger, slower moving shapes */}
+                    {/* Larger, slower moving shapes with updated colors */}
                     <motion.div
-                        className="absolute w-32 h-32 rounded-full bg-blue-300 opacity-5 blur-xl"
+                        className="absolute w-32 h-32 rounded-full bg-indigo-300 opacity-10 blur-xl"
                         style={{ top: '-5%', right: '10%' }}
                         animate={{
                             y: [0, 15, 0],
@@ -212,7 +212,7 @@ const Navbar = ({ user }) => {
                     />
 
                     <motion.div
-                        className="absolute w-24 h-24 rounded-full bg-indigo-300 opacity-5 blur-xl"
+                        className="absolute w-24 h-24 rounded-full bg-blue-300 opacity-10 blur-xl"
                         style={{ bottom: '-5%', left: '25%' }}
                         animate={{
                             y: [0, -15, 0],
@@ -234,15 +234,15 @@ const Navbar = ({ user }) => {
                         <div className="flex items-center">
                             {/* Logo container - responsive based on custom breakpoint */}
                             <Link to="/" className="flex-shrink-0 flex items-center">
-                                <FaComments className="h-8 w-auto text-blue-600" size={28} />
-                                <span className="ml-2 text-xl font-semibold text-gray-900 hidden sm:block">
+                                <FaComments className="h-8 w-auto text-indigo-600" size={28} />
+                                <span className="ml-2 text-xl font-serif font-semibold text-gray-800 hidden sm:block">
                                     <span style={{ display: isLargeScreen ? 'inline' : 'none' }}>Feedback Portal</span>
                                     <span style={{ display: !isLargeScreen && windowWidth >= 768 ? 'inline' : 'none' }}>Feedback</span>
                                 </span>
                             </Link>
                         </div>
 
-                        {/* Desktop Navigation - adjusted spacing and padding */}
+                        {/* Desktop Navigation - adjusted styling to match Dashboard */}
                         <div className="hidden md:flex md:items-center md:justify-end md:flex-1 md:space-x-0.5 lg:space-x-4">
                             {/* Render navigation items when user is logged in */}
                             {user && (
@@ -434,12 +434,12 @@ const Navbar = ({ user }) => {
                             )}
                         </div>
 
-                        {/* Mobile menu button */}
+                        {/* Mobile menu button - updated colors */}
                         <div className="flex items-center md:hidden">
                             <motion.button
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => setIsOpen(!isOpen)}
-                                className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+                                className="inline-flex items-center justify-center p-2 rounded-md text-indigo-700 hover:text-indigo-900 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                                 aria-expanded="false"
                             >
                                 <span className="sr-only">Open main menu</span>
@@ -457,13 +457,13 @@ const Navbar = ({ user }) => {
                     </div>
                 </div>
 
-                {/* Mobile menu, show/hide based on menu state */}
+                {/* Mobile menu, show/hide based on menu state - updated backgrounds */}
                 {isOpen && (
                     <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.2 }}
+                        transition={{ duration: 0.3 }}
                         className="md:hidden bg-white/95 backdrop-blur-sm border-t relative z-10"
                     >
                         <div className="pt-2 pb-3 space-y-1">
@@ -592,8 +592,25 @@ const Navbar = ({ user }) => {
                 )}
             </nav>
 
-            {/* Render the logout confirmation dialog outside of the navigation structure */}
+            {/* Use the LogoutConfirmationModal component directly */}
             <LogoutConfirmationModal />
+
+            {/* Add the same animation styles that are in Dashboard.jsx */}
+            <style jsx global>{`
+                @keyframes zoom-in {
+                    from {
+                        opacity: 0;
+                        transform: scale(0.95);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+                }
+                .motion-safe\:animate-zoom-in {
+                    animation: zoom-in 0.3s ease-out forwards;
+                }
+            `}</style>
         </>
     );
 };

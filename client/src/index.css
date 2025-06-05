@@ -1,1 +1,17 @@
 @import "tailwindcss";
+@layer components {
+	.bg-custom-teal {
+		background-color: #b2d8ce;
+	}
+
+	.bg-custom-blue {
+		background-color: #648db3;
+	}
+
+	.bg-custom-background {
+		background-color: #5459ac;
+	}
+	.bg-custom-h {
+		background-color: #e2e2e2;
+	}
+}
