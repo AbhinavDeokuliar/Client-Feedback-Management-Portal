@@ -47,8 +47,31 @@ const ClientLayout = ({ user }) => {
         when: "beforeChildren",
     };
 
+    // CSS-in-JS styles
+    const styles = {
+        perspective: {
+            perspective: "1500px",
+        },
+        perspective1000: {
+            perspective: "1000px",
+        },
+        pageEdgeContainer: {
+            position: "relative",
+        },
+        pageEdge: {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            width: "3px",
+            background: "linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1))",
+            pointerEvents: "none",
+        }
+    };
+
     return (
-        <div className="container mx-auto py-6 px-4 bg-blue-100 min-h-screen relative perspective">
+        <div className="container mx-auto py-6 px-4 bg-blue-100 min-h-screen relative" style={styles.perspective}>
             {/* Simple decorative elements using Tailwind only */}
             <div className="absolute top-20 left-4 w-12 h-12 rounded-full"></div>
             <div className="absolute top-24 right-10 w-16 h-4"></div>
@@ -58,7 +81,7 @@ const ClientLayout = ({ user }) => {
             <div className="absolute inset-0 bg-gradient-to-br from-amber-100/20 to-transparent pointer-events-none"></div>
 
             {/* Main content with AnimatePresence for route transitions */}
-            <div className="relative perspective-1000 overflow-hidden" style={{ minHeight: "80vh" }}>
+            <div className="relative overflow-hidden" style={{ ...styles.perspective1000, minHeight: "80vh" }}>
                 <AnimatePresence initial={false} mode="wait">
                     <motion.div
                         key={location.pathname}
@@ -68,95 +91,13 @@ const ClientLayout = ({ user }) => {
                         exit="exit"
                         variants={pageVariants}
                         transition={pageTransition}
+                        style={styles.pageEdgeContainer}
                     >
+                        <div style={styles.pageEdge}></div>
                         <InternalRoutes userRole={user.role} />
                     </motion.div>
                 </AnimatePresence>
             </div>
-
-            {/* Add page flip shadow effect */}
-            <style jsx global>{`
-                .perspective {
-                    perspective: 1500px;
-                }
-
-                .perspective-1000 {
-                    perspective: 1000px;
-                }
-
-                /* Dynamic page flip shadow */
-                @keyframes flip-shadow {
-                    0% {
-                        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-                    }
-                    50% {
-                        box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
-                    }
-                    100% {
-                        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
-                    }
-                }
-
-                /* Page edge effect for the right side */
-                .perspective-1000 > div > div {
-                    position: relative;
-                }
-
-                .perspective-1000 > div > div::after {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    right: 0;
-                    bottom: 0;
-                    width: 3px;
-                    background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1));
-                    pointer-events: none;
-                }
-
-                /* Keep any old keyframes in case something else uses them */
-                @keyframes shadow-change {
-                    0% {
-                        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-                    }
-                    50% {
-                        box-shadow: 0 20px 25px rgba(0, 0, 0, 0.25);
-                    }
-                    100% {
-                        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-                    }
-                }
-
-                @keyframes page-edge {
-                    from {
-                        background-position: 0% 50%;
-                    }
-                    to {
-                        background-position: 100% 50%;
-                    }
-                }
-
-                @keyframes page-fade-in {
-                    from {
-                        opacity: 0;
-                        transform: translateX(10px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-                }
-
-                @keyframes page-fade-out {
-                    from {
-                        opacity: 1;
-                        transform: translateX(0);
-                    }
-                    to {
-                        opacity: 0;
-                        transform: translateX(-10px);
-                    }
-                }
-            `}</style>
         </div>
     );
 };

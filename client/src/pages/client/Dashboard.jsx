@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import FeedbackList from '../../components/Client_Component/FeedbackList';
 import { formatDistanceToNow } from 'date-fns';
@@ -61,6 +61,35 @@ const AnimatedBackground = () => {
 const Dashboard = () => {
     const [activeFeedback, setActiveFeedback] = useState(null);
     const [isModalClosing, setIsModalClosing] = useState(false);
+
+    // Add useEffect to inject animation styles
+    useEffect(() => {
+        // Create a style element
+        const styleEl = document.createElement('style');
+        styleEl.textContent = `
+            @keyframes zoom-in {
+                from {
+                    opacity: 0;
+                    transform: scale(0.95);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+            
+            .motion-safe\\:animate-zoom-in {
+                animation: zoom-in 0.3s ease-out forwards;
+            }
+        `;
+        // Append to document head
+        document.head.appendChild(styleEl);
+
+        // Cleanup on unmount
+        return () => {
+            document.head.removeChild(styleEl);
+        };
+    }, []);
 
     // Handler for when a feedback item is clicked to view details
     const handleViewFeedback = (feedback) => {
@@ -249,24 +278,6 @@ const Dashboard = () => {
                     </div>
                 </div>
             )}
-
-            {/* Animation styles */}
-            <style jsx global>{`
-                @keyframes zoom-in {
-                    from {
-                        opacity: 0;
-                        transform: scale(0.95);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: scale(1);
-                    }
-                }
-                
-                .motion-safe\\:animate-zoom-in {
-                    animation: zoom-in 0.3s ease-out forwards;
-                }
-            `}</style>
         </div>
     );
 };

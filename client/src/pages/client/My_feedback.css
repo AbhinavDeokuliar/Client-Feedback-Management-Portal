@@ -1,0 +1,163 @@
+/* Notebook styling */
+.notebook-container {
+	position: relative;
+	background-color: #fff;
+	/* Horizontal lines for notebook paper */
+	background-image: linear-gradient(#e6e6f7 1px, transparent 1px);
+	background-size: 100% 2rem;
+	padding: 0;
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+}
+
+/* Add paper texture */
+.notebook-container::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239C92AC' fill-opacity='0.05' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+	pointer-events: none;
+	z-index: 0;
+}
+
+/* Enhanced spiral binding with shadow effect */
+.notebook-spiral {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 25px;
+	background: linear-gradient(to right, #e0e0e0, #f5f5f5);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+	border-right: 1px solid #ddd;
+	box-shadow: inset -2px 0 5px rgba(0, 0, 0, 0.05),
+		2px 0 5px rgba(0, 0, 0, 0.03);
+	z-index: 2;
+}
+
+.spiral-ring {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border: 1.5px solid #aaa;
+	background: radial-gradient(circle at 40% 40%, #fff 30%, #eaeaea 70%);
+	box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.15);
+	position: relative;
+}
+
+/* Add inner shadow to spiral rings */
+.spiral-ring::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 4px;
+	height: 4px;
+	border-radius: 50%;
+	background-color: rgba(0, 0, 0, 0.15);
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Enhanced loading indicator */
+.loader {
+	border: 3px solid rgba(240, 240, 250, 0.8);
+	border-top: 3px solid #3498db;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	animation: spin 1s cubic-bezier(0.46, 0.03, 0.52, 0.96) infinite;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+/* Notebook lines for content */
+.notebook-line {
+	position: relative;
+	z-index: 1;
+}
+
+/* Custom style for the notebook lines */
+.notebook-content {
+	position: relative;
+	min-height: 300px;
+	padding-right: 15px;
+}
+
+/* Add vertical red margin line */
+.notebook-content::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 35px;
+	width: 1px;
+	background-color: rgba(255, 0, 0, 0.2);
+	z-index: 1;
+}
+
+/* Status badge styling */
+.status-badge {
+	display: inline-block;
+	padding: 4px 8px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 500;
+	color: #fff;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Comment badge styling */
+.comment-badge {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background-color: #f0f0f0;
+	color: #555;
+	font-size: 12px;
+	font-weight: 600;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease;
+}
+
+.comment-badge:hover {
+	transform: scale(1.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+	.notebook-content::before {
+		left: 25px;
+	}
+
+	.notebook-content {
+		padding-left: 10px;
+	}
+}

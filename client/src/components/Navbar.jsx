@@ -351,6 +351,7 @@ const Navbar = ({ user }) => {
                                                             key={notification.id}
                                                             initial={{ opacity: 0, y: -10 }}
                                                             animate={{ opacity: 1, y: 0 }}
+                                                            style={{ transformOrigin: "center center" }}
                                                             className="px-4 py-3 border-b hover:bg-gray-50 cursor-pointer"
                                                             onClick={() => {
                                                                 setShowNotifications(false);
@@ -464,6 +465,7 @@ const Navbar = ({ user }) => {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
+                        style={{ transformOrigin: "top center" }}
                         className="md:hidden bg-white/95 backdrop-blur-sm border-t relative z-10"
                     >
                         <div className="pt-2 pb-3 space-y-1">
@@ -596,7 +598,7 @@ const Navbar = ({ user }) => {
             <LogoutConfirmationModal />
 
             {/* Add the same animation styles that are in Dashboard.jsx */}
-            <style jsx global>{`
+            <style>{`
                 @keyframes zoom-in {
                     from {
                         opacity: 0;
@@ -607,7 +609,7 @@ const Navbar = ({ user }) => {
                         transform: scale(1);
                     }
                 }
-                .motion-safe\:animate-zoom-in {
+                .motion-safe\\:animate-zoom-in {
                     animation: zoom-in 0.3s ease-out forwards;
                 }
             `}</style>

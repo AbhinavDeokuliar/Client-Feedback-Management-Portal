@@ -186,7 +186,13 @@ const Submit_Feedback = () => {
         setIsSubmitting(true);
 
         try {
-            await FeedbackService.createFeedback(formData);
+            // Create a copy of the form data and add the category field
+            const feedbackData = {
+                ...formData,
+                category: formData.categoryId // Add the category field with categoryId value
+            };
+
+            await FeedbackService.createFeedback(feedbackData);
 
             setIsSubmitting(false);
             setSubmitSuccess(true);
