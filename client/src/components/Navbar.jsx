@@ -121,20 +121,12 @@ const Navbar = ({ user }) => {
     const LogoutConfirmationModal = () => (
         <AnimatePresence>
             {showLogoutConfirm && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                <div
                     className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center"
                     onClick={() => setShowLogoutConfirm(false)}
                 >
-                    <motion.div
-                        initial={{ scale: 0.95, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        exit={{ scale: 0.95, opacity: 0 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="bg-white rounded-lg shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform motion-safe:animate-zoom-in"
+                    <div
+                        className="bg-white rounded-lg shadow-2xl w-full max-w-sm mx-4 overflow-hidden"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div className="px-6 pt-6 pb-4">
@@ -158,8 +150,8 @@ const Navbar = ({ user }) => {
                                 Sign Out
                             </button>
                         </div>
-                    </motion.div>
-                </motion.div>
+                    </div>
+                </div>
             )}
         </AnimatePresence>
     );
@@ -323,50 +315,6 @@ const Navbar = ({ user }) => {
                                         </>
                                     )}
 
-                                    {/* Notifications dropdown */}
-                                    <div className="relative px-0.5 md:px-1">
-                                        <motion.button
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            onClick={() => setShowNotifications(!showNotifications)}
-                                            className="p-2 rounded-full text-gray-600 hover:bg-gray-100 relative"
-                                            title="Notifications"
-                                        >
-                                            <FaBell size={18} />
-                                            {notifications.length > 0 && (
-                                                <span className="absolute top-0 right-0 block h-4 w-4 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                                                    {notifications.length}
-                                                </span>
-                                            )}
-                                        </motion.button>
-
-                                        {showNotifications && (
-                                            <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg py-1 z-10 max-h-96 overflow-y-auto">
-                                                <div className="px-4 py-2 text-sm font-semibold border-b">Notifications</div>
-                                                {notifications.length === 0 ? (
-                                                    <div className="px-4 py-3 text-sm text-gray-500">No new notifications</div>
-                                                ) : (
-                                                    notifications.map((notification) => (
-                                                        <motion.div
-                                                            key={notification.id}
-                                                            initial={{ opacity: 0, y: -10 }}
-                                                            animate={{ opacity: 1, y: 0 }}
-                                                            style={{ transformOrigin: "center center" }}
-                                                            className="px-4 py-3 border-b hover:bg-gray-50 cursor-pointer"
-                                                            onClick={() => {
-                                                                setShowNotifications(false);
-                                                                navigate(notification.link);
-                                                            }}
-                                                        >
-                                                            <div className="font-medium text-sm">{notification.title}</div>
-                                                            <div className="text-xs text-gray-500">{notification.message}</div>
-                                                            <div className="text-xs text-gray-400 mt-1">{new Date(notification.createdAt).toLocaleString()}</div>
-                                                        </motion.div>
-                                                    ))
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
 
                                     {/* User profile button - using tooltip on md screens */}
                                     <div className="relative px-0.5 md:px-1">

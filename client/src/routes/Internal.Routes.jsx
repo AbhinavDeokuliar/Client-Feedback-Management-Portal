@@ -12,7 +12,7 @@ import Exports from '../pages/admin/Exports.jsx';
 
 // Client pages
 import Dashboard from '../pages/client/Dashboard.jsx';
-import My_Feedback from '../pages/client/My_Feedback.jsx';
+import My_Feedback from '../pages/client/My_feedback.jsx';
 import Submit_Feedback from '../pages/client/Submit_Feedback.jsx';
 
 // Team pages
@@ -21,6 +21,7 @@ import Assigned_Feedback from '../pages/team/Assigned_Feedback.jsx';
 
 // Common pages
 import Not_Found from '../pages/Not_Found.jsx';
+import Profile from '../pages/Profile.jsx';
 
 const InternalRoutes = ({ userRole }) => {
     return (
@@ -74,6 +75,9 @@ const InternalRoutes = ({ userRole }) => {
                 ['team', 'manager', 'developer', 'qa', 'support'].includes(userRole) ?
                     <Assigned_Feedback /> : <Navigate to="/" replace />
             } />
+
+            {/* Common Routes - accessible by all authenticated users */}
+            <Route path="/profile" element={<Profile />} />
 
             {/* 404 page for unmatched routes */}
             <Route path="*" element={<Not_Found />} />

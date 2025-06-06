@@ -10,7 +10,7 @@ const My_feedback = () => {
     const [categories, setCategories] = useState([]);
     const [filters, setFilters] = useState({
         page: 1,
-        limit: 5,
+        limit: 10,
         status: '',
         priority: '',
         category: '',
